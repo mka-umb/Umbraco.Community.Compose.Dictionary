@@ -32,7 +32,7 @@
     Microsoft.Extensions.Http.Resilience arrives transitively via Umbraco.
   -->
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms.Infrastructure" Version="[17.0.0, 18.0.0)" />
+    <PackageReference Include="Umbraco.Cms.Infrastructure" Version="18.2.1" />
     <PackageReference Include="Umbraco.Compose.Integrations.UmbracoCms.Core" Version="[17.0.0, 18.0.0)" />
     <!-- Used by ComposeAuthenticationMessageHandler to request a client-credentials token with an
          explicit issuer. Floor matches the Compose Core dependency; unifies with the host's version. -->
