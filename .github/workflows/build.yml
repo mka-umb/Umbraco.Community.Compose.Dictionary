@@ -1,0 +1,48 @@
+name: Build and publish
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  PROJECT: src/Umbraco.Community.Compose.Dictionary/Umbraco.Community.Compose.Dictionary.csproj
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore
+        run: dotnet restore Umbraco.Community.Compose.Dictionary.slnx
+
+      - name: Build
+        run: dotnet build Umbraco.Community.Compose.Dictionary.slnx -c Release --no-restore
+
+      # Tag v1.2.3 publishes version 1.2.3; every other build gets a CI pre-release version.
+      - name: Pack
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+          else
+            VERSION="0.0.0-ci.${GITHUB_RUN_NUMBER}"
+          fi
+          dotnet pack "$PROJECT" -c Release -o artifacts -p:Version="$VERSION"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nupkg
+          path: artifacts/*.nupkg
+
+      # Requires a NUGET_API_KEY repository secret. Never put the key in this file.
+      - name: Publish to NuGet
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: dotnet nuget push "artifacts/*.nupkg" --api-key "${{ secrets.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate

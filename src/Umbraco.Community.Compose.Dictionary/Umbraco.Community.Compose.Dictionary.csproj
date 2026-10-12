@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TreatWarningsAsErrors Condition="$(Configuration) == 'Release'">true</TreatWarningsAsErrors>
+    <!-- Keep NuGet audit advisories (e.g. a vulnerable MailKit pulled in transitively via Umbraco,
+         which this library never uses) visible as warnings without failing the Release build. -->
+    <WarningsNotAsErrors>NU1902;NU1903</WarningsNotAsErrors>
+    <RootNamespace>Umbraco.Community.Compose.Dictionary</RootNamespace>
+  </PropertyGroup>
+
+  <!-- Package metadata: replace the placeholders before publishing. -->
+  <PropertyGroup>
+    <PackageId>Umbraco.Community.Compose.Dictionary</PackageId>
+    <Version>1.0.0</Version>
+    <Title>Umbraco Compose Dictionary Ingestion</Title>
+    <Description>Ingests Umbraco CMS dictionary items into Umbraco Compose, one variant per language.</Description>
+    <Authors>Marko Katic</Authors>
+    <PackageTags>umbraco;umbraco-marketplace;umbraco-compose;dictionary;translations</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <!--
+    Only depends on the Compose Core package (authentication, endpoint URLs, JSON Schema generator).
+    Microsoft.Extensions.Http.Resilience arrives transitively via Umbraco.
+  -->
+  <ItemGroup>
+    <PackageReference Include="Umbraco.Cms.Infrastructure" Version="[17.0.0, 18.0.0)" />
+    <PackageReference Include="Umbraco.Compose.Integrations.UmbracoCms.Core" Version="[17.0.0, 18.0.0)" />
+    <!-- Used by ComposeAuthenticationMessageHandler to request a client-credentials token with an
+         explicit issuer. Floor matches the Compose Core dependency; unifies with the host's version. -->
+    <PackageReference Include="OpenIddict.Client" Version="[7.2.0, 8.0.0)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

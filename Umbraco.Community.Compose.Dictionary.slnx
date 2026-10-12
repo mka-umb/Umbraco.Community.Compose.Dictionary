@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Umbraco.Community.Compose.Dictionary/Umbraco.Community.Compose.Dictionary.csproj" />
+  </Folder>
+</Solution>
