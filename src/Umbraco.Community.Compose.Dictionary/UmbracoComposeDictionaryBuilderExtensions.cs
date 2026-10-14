@@ -1,5 +1,4 @@
 using System.Threading.Channels;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using OpenIddict.Client;
@@ -22,35 +21,28 @@ public static class UmbracoComposeDictionaryBuilderExtensions
         /// Adds Umbraco Compose dictionary ingestion.
         /// </summary>
         /// <remarks>
-        /// Call this after <c>AddComposers()</c>. By default this registers Compose authentication itself,
-        /// which a standalone install needs. When the official Compose integration is also installed it
-        /// registers authentication in a composer (at <c>Build()</c>, after this method), so both end up
-        /// registering a client for the same issuer. That is de-duplicated automatically, so the default
-        /// works with or without the official integration — no configuration required. Set
-        /// <c>Umbraco:Compose:Dictionary:RegisterComposeAuthentication</c> to <c>false</c> only to stop
-        /// this package from registering authentication at all (for example to rely solely on the official
-        /// integration's registration).
+        /// Call this after <c>AddComposers()</c>. This registers Compose authentication itself (a standalone
+        /// install needs it) and stamps a dedicated <see cref="ComposeAuthenticationMessageHandler.ComposeRegistrationId"/>
+        /// onto its OpenIddict client registration. That makes it work automatically with or without the
+        /// official Compose integration: when both register a client for the same Compose issuer, the two
+        /// registrations have distinct ids (ours explicit, the official's a computed default), so OpenIddict
+        /// accepts them, and this package resolves tokens by its own id. No configuration required.
         /// </remarks>
         /// <returns>The Umbraco builder.</returns>
         public IUmbracoBuilder AddUmbracoComposeDictionaryIngestion()
         {
             ArgumentNullException.ThrowIfNull(builder);
 
-            bool registerComposeAuthentication = builder.Config
-                .GetValue<bool?>("Umbraco:Compose:Dictionary:RegisterComposeAuthentication") ?? true;
+            builder.AddUmbracoComposeAuthentication();
 
-            if (registerComposeAuthentication)
-            {
-                builder.AddUmbracoComposeAuthentication();
-            }
-
-            // Collapse duplicate Compose client registrations to one. When both this package and the
-            // official Compose integration register authentication, two registrations exist for the same
-            // issuer, which OpenIddict cannot resolve without a RegistrationId. De-duplicating here keeps
-            // RegisterComposeAuthentication optional: the default works whether or not the official
-            // integration is installed. Runs as PostConfigure so it sees registrations added by composers.
+            // Give our Compose client registration an explicit RegistrationId. The official integration (if
+            // installed) registers a client for the same issuer with no id; OpenIddict computes a default id
+            // from the issuer, so two such registrations would collide (error ID0347). Stamping an explicit
+            // id makes the ids distinct and lets ComposeAuthenticationMessageHandler resolve ours by id.
+            // This runs as a Configure (before OpenIddict's validating PostConfigure) and is registered at
+            // builder time (before any composer-time Configure), so it stamps exactly our own registration.
             builder.Services.AddOptions<OpenIddictClientOptions>()
-                .PostConfigure<IOptions<UmbracoComposeOptions>>(static (options, composeOptions) =>
+                .Configure<IOptions<UmbracoComposeOptions>>(static (options, composeOptions) =>
                 {
                     if (!composeOptions.Value.IsValid)
                     {
@@ -58,23 +50,14 @@ public static class UmbracoComposeDictionaryBuilderExtensions
                     }
 
                     Uri issuer = composeOptions.Value.GetManagementBaseUrl();
-                    bool kept = false;
 
-                    options.Registrations.RemoveAll(registration =>
+                    OpenIddictClientRegistration? registration = options.Registrations.FirstOrDefault(r =>
+                        issuer.Equals(r.Issuer) && string.IsNullOrEmpty(r.RegistrationId));
+
+                    if (registration is not null)
                     {
-                        if (!issuer.Equals(registration.Issuer))
-                        {
-                            return false;
-                        }
-
-                        if (kept)
-                        {
-                            return true;
-                        }
-
-                        kept = true;
-                        return false;
-                    });
+                        registration.RegistrationId = ComposeAuthenticationMessageHandler.ComposeRegistrationId;
+                    }
                 });
 
             builder.Services.AddOptions<UmbracoComposeDictionaryOptions>()

@@ -31,7 +31,7 @@ builder.CreateUmbracoBuilder()
     .Build();
 ```
 
-Call it after `AddComposers()`. By default this package registers Compose authentication itself, which is what a standalone install needs. If the official Compose integration is also installed it registers authentication too (in a composer), producing a duplicate client registration for the same issuer — this package de-duplicates that automatically, so the default works either way with no configuration. Set `RegisterComposeAuthentication` to `false` (see below) only if you want this package to skip registering authentication entirely and rely on the official integration's registration.
+Call it after `AddComposers()`. The package registers Compose authentication itself (a standalone install needs it) under a dedicated OpenIddict registration id, so it works automatically whether or not the official Compose integration is also installed — no configuration required.
 
 ## Configuration
 
@@ -46,7 +46,6 @@ Call it after `AddComposers()`. By default this package registers Compose authen
     "Dictionary": {
       "CollectionAlias": "dictionary",
       "TypeSchemaAlias": "dictionaryItem",
-      "RegisterComposeAuthentication": true,
       "RegisterTypeSchema": true,
       "SyncAllOnStartup": true,
       "BatchSize": 100,
@@ -56,7 +55,7 @@ Call it after `AddComposers()`. By default this package registers Compose authen
 }
 ```
 
-The `Umbraco:Compose` credentials are the same ones the official integration uses, so a site that already has it only needs the `Dictionary` section. Leave `RegisterComposeAuthentication` at its default (`true`) in all cases — if the official integration is present, the duplicate authentication client is de-duplicated automatically. Set it to `false` only if you specifically want this package not to register authentication. Keep `ClientSecret` out of committed files: use `appsettings.local.json`, user secrets or Key Vault.
+The `Umbraco:Compose` credentials are the same ones the official integration uses, so a site that already has it only needs the `Dictionary` section. Keep `ClientSecret` out of committed files: use `appsettings.local.json`, user secrets or Key Vault.
 
 ## Data model
 

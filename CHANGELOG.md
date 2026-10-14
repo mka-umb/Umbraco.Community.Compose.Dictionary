@@ -15,11 +15,10 @@ All notable changes to this project are documented here. The format is based on
 - Full re-sync on startup to backfill existing items and recover anything missed while down.
 - Burst coalescing and batched ingestion with retry/backoff.
 - Optional type-schema registration (`RegisterTypeSchema`).
-- `RegisterComposeAuthentication` option (default `true`) that works standalone or alongside the
-  official Compose integration; duplicate authentication registrations are de-duplicated
-  automatically.
-- Authentication handler that resolves the Compose client registration by explicit issuer, so it
-  works even when other OpenIddict clients (e.g. Slack, Umbraco Cloud) are registered.
+- Works automatically with or without the official Compose integration: the package registers its
+  Compose client under a dedicated OpenIddict registration id and resolves tokens by that id, so it
+  does not collide with the official integration's registration and is unaffected by other OpenIddict
+  clients (e.g. Slack, Umbraco Cloud).
 
 [Unreleased]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/releases/tag/v1.0.0

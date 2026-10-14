@@ -21,15 +21,6 @@ public sealed class UmbracoComposeDictionaryOptions
     public string TypeSchemaAlias { get; set; } = "dictionaryItem";
 
     /// <summary>
-    /// Whether this package registers Umbraco Compose authentication itself. The default (<c>true</c>)
-    /// works with or without the official Umbraco Compose integration: if that integration is also
-    /// installed, the resulting duplicate client registration for the same issuer is de-duplicated
-    /// automatically. Set to <c>false</c> only to stop this package from registering authentication at
-    /// all and rely solely on the official integration's registration.
-    /// </summary>
-    public bool RegisterComposeAuthentication { get; set; } = true;
-
-    /// <summary>
     /// Whether to create/update the type schema in Compose on first use.
     /// Requires the <c>{environment}:typeschema:write</c> scope. Disable it if you manage the schema yourself.
     /// </summary>
