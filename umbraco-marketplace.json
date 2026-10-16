@@ -1,0 +1,9 @@
+{
+  "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json",
+  "Title": "Umbraco Compose Dictionary Ingestion",
+  "Description": "Ingests Umbraco CMS dictionary items into Umbraco Compose, one entry per culture variant. Saving, moving or deleting a dictionary item updates Compose automatically, and existing items are backfilled with a full sync on startup.",
+  "Category": "Translations",
+  "Tags": [ "umbraco-compose", "dictionary", "translations", "ingestion", "localization" ],
+  "DocumentationUrl": "https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary#readme",
+  "IssueTrackerUrl": "https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/issues"
+}
