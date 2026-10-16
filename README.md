@@ -95,15 +95,6 @@ The request payloads mirror the official content ingestion's entry types (as of 
 - **Language deletion.** Deleting a language does not remove that culture's variants from Compose.
 - **Type schema.** The generated schema has not been validated against every Compose schema rule. Review it in a dev environment first.
 
-## Building and publishing
-
-```shell
-dotnet build -c Release
-dotnet pack src/Umbraco.Community.Compose.Dictionary -c Release -o artifacts
-```
-
-The GitHub Actions workflow builds every push and PR. Pushing a tag such as `v1.0.0` publishes that version to NuGet. That step needs a `NUGET_API_KEY` repository secret.
-
 ## License
 
 MIT
