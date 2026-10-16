@@ -15,7 +15,7 @@
   <!-- Package metadata: replace the placeholders before publishing. -->
   <PropertyGroup>
     <PackageId>Umbraco.Community.Compose.Dictionary</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Title>Umbraco Compose Dictionary Ingestion</Title>
     <Description>Ingests Umbraco CMS dictionary items into Umbraco Compose, one variant per language.</Description>
     <Authors>Marko Katic</Authors>

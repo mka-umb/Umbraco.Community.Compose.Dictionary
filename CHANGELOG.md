@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-16
+
+### Changed
+- Removed the "Building and publishing" section from the README (documentation only; no code changes).
+
 ## [1.0.0] - 2026-10-12
 
 ### Added
@@ -20,5 +25,6 @@ All notable changes to this project are documented here. The format is based on
   does not collide with the official integration's registration and is unaffected by other OpenIddict
   clients (e.g. Slack, Umbraco Cloud).
 
-[Unreleased]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/releases/tag/v1.0.0
