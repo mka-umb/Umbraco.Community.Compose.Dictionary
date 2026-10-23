@@ -68,7 +68,7 @@ Each dictionary item becomes one Compose entry per language:
 
 Clearing a translation deletes that variant. Deleting an item deletes its subtree via `ancestors_some`.
 
-The following example follows the query shape used by the official Compose Data Source package. Check it against your environment's GraphQL schema.
+The type schema is registered as a Compose node (it extends `https://umbracocompose.com/v1/node`), so Compose exposes it as a GraphQL type that implements the `Node` interface. That is what lets you select `id` and spread `... on DictionaryItem` on the connection's `items`. The example below follows the query shape used by the official Compose Data Source package; check the type name against your environment's GraphQL schema (Compose derives it from `TypeSchemaAlias`, so the default `dictionaryItem` becomes `DictionaryItem`).
 
 ```graphql
 query Dictionary($variant: String, $after: String) {

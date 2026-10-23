@@ -6,6 +6,14 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-10-23
+
+### Changed
+- The registered type schema now extends the Compose node base (`https://umbracocompose.com/v1/node`),
+  so dictionary items are exposed as a GraphQL type implementing the `Node` interface. This lets
+  consumers select `id` and spread `... on DictionaryItem { key value }` on the collection connection,
+  which previously failed because the type was a plain object and never a `Node`.
+
 ## [1.0.1] - 2026-10-16
 
 ### Changed
@@ -25,6 +33,7 @@ All notable changes to this project are documented here. The format is based on
   does not collide with the official integration's registration and is unaffected by other OpenIddict
   clients (e.g. Slack, Umbraco Cloud).
 
-[Unreleased]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/releases/tag/v1.0.0

@@ -27,6 +27,11 @@ internal sealed class DictionaryIngestBackgroundService(
     internal const string IngestionClientName = "UmbracoComposeDictionaryIngestion";
     internal const string ManagementClientName = "UmbracoComposeDictionaryManagement";
 
+    // The base Compose node schema. Referencing it via `allOf` makes the generated type a Compose
+    // node, so Compose exposes it as a GraphQL type implementing the `Node` interface. Without it the
+    // type is a plain object and `... on DictionaryItem` cannot be selected on a `[Node]` connection.
+    private const string ComposeNodeSchemaRef = "https://umbracocompose.com/v1/node";
+
     private const int MaxItemsPerMerge = 500;
     private static readonly TimeSpan s_coalesceWindow = TimeSpan.FromMilliseconds(250);
     private static readonly TimeSpan s_maxRetryDelay = TimeSpan.FromMinutes(5);
@@ -134,6 +139,9 @@ internal sealed class DictionaryIngestBackgroundService(
             DefaultSchema = "https://umbracocompose.com/v1/schema",
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         });
+
+        // Extend the Compose node base so the type is queryable as a GraphQL Node (see the field above).
+        schema.AllOf = [JsonSchemaBuilder.Create().Ref(ComposeNodeSchemaRef).Build()];
 
         object[] body =
         [
