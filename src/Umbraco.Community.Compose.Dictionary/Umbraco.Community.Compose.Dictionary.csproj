@@ -36,7 +36,7 @@
     <PackageReference Include="Umbraco.Compose.Integrations.UmbracoCms.Core" Version="[17.0.0, 18.0.0)" />
     <!-- Used by ComposeAuthenticationMessageHandler to request a client-credentials token with an
          explicit issuer. Floor matches the Compose Core dependency; unifies with the host's version. -->
-    <PackageReference Include="OpenIddict.Client" Version="[7.2.0, 8.0.0)" />
+    <PackageReference Include="OpenIddict.Client" Version="[7.7.2, 8.0.0)" />
   </ItemGroup>
 
   <ItemGroup>
