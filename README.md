@@ -2,7 +2,7 @@
 
 [![Build and publish](https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/actions/workflows/build.yml/badge.svg)](https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-<!-- TODO after first publish: [![NuGet](https://img.shields.io/nuget/v/Umbraco.Community.Compose.Dictionary.svg)](https://www.nuget.org/packages/Umbraco.Community.Compose.Dictionary) -->
+[![NuGet](https://img.shields.io/nuget/v/Umbraco.Community.Compose.Dictionary.svg)](https://www.nuget.org/packages/Umbraco.Community.Compose.Dictionary)
 
 Ingests Umbraco CMS dictionary items into [Umbraco Compose](https://docs.umbraco.com/umbraco-compose). Saving, moving or deleting a dictionary item updates Compose automatically, and existing items are backfilled on startup.
 
