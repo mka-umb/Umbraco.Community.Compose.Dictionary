@@ -6,6 +6,13 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [1.0.4] - 2026-10-30
+
+### Changed
+- Replaced the README's Mermaid diagrams with rendered PNG images (referenced by absolute raw-GitHub
+  URLs) so the data-flow and data-model diagrams display on the NuGet package page, which does not
+  render Mermaid. Diagram sources are kept under `docs/images/*.mmd`. Documentation only; no code changes.
+
 ## [1.0.3] - 2026-10-30
 
 ### Changed
@@ -38,7 +45,8 @@ All notable changes to this project are documented here. The format is based on
   does not collide with the official integration's registration and is unaffected by other OpenIddict
   clients (e.g. Slack, Umbraco Cloud).
 
-[Unreleased]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.3...HEAD
+[Unreleased]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.4...HEAD
+[1.0.4]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.0...v1.0.1

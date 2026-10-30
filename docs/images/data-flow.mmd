@@ -1,0 +1,10 @@
+flowchart TD
+    A[Dictionary item<br/>saved / moved / deleted] -->|notification after scope completes| B[Change queue<br/>in memory]
+    S[Startup full sync<br/>backfill &amp; recovery] --> C
+    B --> C[Background service<br/>coalesce bursts]
+    C -->|re-read current state| D[IDictionaryItemService]
+    D --> C
+    C --> E[PUT batches to<br/>Compose Ingestion API]
+    E -->|success| F[(Umbraco Compose)]
+    E -->|failure| G[Retry with exponential backoff<br/>up to MaxAttempts]
+    G -->|reconcile against current state| C

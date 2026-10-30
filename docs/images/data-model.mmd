@@ -1,0 +1,16 @@
+flowchart LR
+    subgraph U["Umbraco dictionary item"]
+        K["Guid key: 3f2a…b1c<br/>String key: greeting"]
+        T1["en-US → &quot;Hello&quot;"]
+        T2["da-DK → &quot;Hej&quot;"]
+    end
+
+    subgraph C["Compose entries (one per language)"]
+        E1["id: 3f2a…b1c<br/>variant: en-US<br/>type: dictionaryItem<br/>data: { key, value, parentId,<br/>ancestors, updateDate }"]
+        E2["id: 3f2a…b1c<br/>variant: da-DK<br/>type: dictionaryItem<br/>data: { key, value, parentId,<br/>ancestors, updateDate }"]
+    end
+
+    T1 --> E1
+    T2 --> E2
+    K -.->|same Guid id<br/>across variants| E1
+    K -.-> E2
