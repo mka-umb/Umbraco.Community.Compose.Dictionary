@@ -61,6 +61,25 @@ The `Umbraco:Compose` credentials are the same ones the official integration use
 
 Each dictionary item becomes one Compose entry per language:
 
+```mermaid
+flowchart LR
+    subgraph U["Umbraco dictionary item"]
+        K["Guid key: 3f2a…b1c<br/>String key: greeting"]
+        T1["en-US → &quot;Hello&quot;"]
+        T2["da-DK → &quot;Hej&quot;"]
+    end
+
+    subgraph C["Compose entries (one per language)"]
+        E1["id: 3f2a…b1c<br/>variant: en-US<br/>type: dictionaryItem<br/>data: { key, value, parentId,<br/>ancestors, updateDate }"]
+        E2["id: 3f2a…b1c<br/>variant: da-DK<br/>type: dictionaryItem<br/>data: { key, value, parentId,<br/>ancestors, updateDate }"]
+    end
+
+    T1 --> E1
+    T2 --> E2
+    K -.->|same Guid id<br/>across variants| E1
+    K -.-> E2
+```
+
 - **`id`** is the dictionary item's Guid key, not its string key, so renaming a key is a plain upsert.
 - **`variant`** is the language ISO code, for example `en-US`.
 - **`type`** is `TypeSchemaAlias`.
@@ -72,7 +91,7 @@ The type schema is registered as a Compose node (it extends `https://umbracocomp
 
 ```graphql
 query Dictionary($variant: String, $after: String) {
-  dictionary(where: { variant: $variant }, first: 500, after: $after) {
+  dictionary(where: { variant: $variant }, first: 100, after: $after) {
     items { id variant ... on DictionaryItem { key value } }
     pageInfo { endCursor hasNextPage }
   }
@@ -81,8 +100,21 @@ query Dictionary($variant: String, $after: String) {
 
 ## How it works
 
+```mermaid
+flowchart TD
+    A[Dictionary item<br/>saved / moved / deleted] -->|notification after scope completes| B[Change queue<br/>in memory]
+    S[Startup full sync<br/>backfill &amp; recovery] --> C
+    B --> C[Background service<br/>coalesce bursts]
+    C -->|re-read current state| D[IDictionaryItemService]
+    D --> C
+    C --> E[PUT batches to<br/>Compose Ingestion API]
+    E -->|success| F[(Umbraco Compose)]
+    E -->|failure| G[Retry with exponential backoff<br/>up to MaxAttempts]
+    G -->|reconcile against current state| C
+```
+
 1. Notification handlers queue changes after the Umbraco scope completes.
-2. A background service coalesces bursts (such as a uSync import) and re-reads the current state from `IDictionaryItemService`.
+2. A background service coalesces bursts and re-reads the current state from `IDictionaryItemService`.
 3. It PUTs batches to the Compose ingestion API.
 4. Failed batches are retried with exponential backoff up to `MaxAttempts`. Processing reconciles against the current state, so retries are always safe.
 5. A full sync on startup handles backfill and recovery. This replaces a database queue, which is cheap to do because dictionaries are small.
