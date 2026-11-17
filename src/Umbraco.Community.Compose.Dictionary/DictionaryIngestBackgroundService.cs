@@ -233,9 +233,13 @@ internal sealed class DictionaryIngestBackgroundService(
                 .Select(static g => new DictionaryChange(g.Key, g.Any(static c => c.IncludeDescendants)))
         ];
 
+        string[] removedCultures =
+            [.. items.SelectMany(static i => i.RemovedCultures).Distinct(StringComparer.OrdinalIgnoreCase)];
+
         return new DictionaryIngestQueueItem(changes, items.Any(static i => i.FullSync))
         {
-            Attempt = items.Min(static i => i.Attempt)
+            Attempt = items.Min(static i => i.Attempt),
+            RemovedCultures = removedCultures
         };
     }
 }

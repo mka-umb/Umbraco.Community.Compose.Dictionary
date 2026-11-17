@@ -96,7 +96,8 @@ public static class UmbracoComposeDictionaryBuilderExtensions
             builder
                 .AddNotificationHandler<DictionaryItemSavedNotification, DictionaryNotificationHandler>()
                 .AddNotificationHandler<DictionaryItemDeletedNotification, DictionaryNotificationHandler>()
-                .AddNotificationHandler<DictionaryItemMovedNotification, DictionaryNotificationHandler>();
+                .AddNotificationHandler<DictionaryItemMovedNotification, DictionaryNotificationHandler>()
+                .AddNotificationHandler<LanguageDeletedNotification, DictionaryNotificationHandler>();
 
             return builder;
         }

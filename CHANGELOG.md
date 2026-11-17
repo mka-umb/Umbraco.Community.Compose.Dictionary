@@ -6,6 +6,14 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [1.0.5] - 2026-11-17
+
+### Fixed
+- Deleting a language now removes that culture's variants from Compose. A `LanguageDeletedNotification`
+  handler queues the removed ISO code(s), and the processor issues a collection-wide delete-by-variant.
+  Previously the variants were left orphaned, because reconciliation only ever ran over the
+  currently-existing languages.
+
 ## [1.0.4] - 2026-10-30
 
 ### Changed
@@ -45,7 +53,8 @@ All notable changes to this project are documented here. The format is based on
   does not collide with the official integration's registration and is unaffected by other OpenIddict
   clients (e.g. Slack, Umbraco Cloud).
 
-[Unreleased]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.4...HEAD
+[Unreleased]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.5...HEAD
+[1.0.5]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.1...v1.0.2

@@ -31,6 +31,19 @@ internal sealed class DictionaryIngestQueueItemProcessor(
         string[] cultures = [.. (await languageService.GetAllAsync().ConfigureAwait(false)).Select(static l => l.IsoCode)];
         string typeAlias = options.Value.TypeSchemaAlias;
 
+        // Remove every variant for languages deleted in Umbraco. One delete-by-variant covers all
+        // items, and a dedicated collection makes it safe (see UmbracoComposeDictionaryOptions.CollectionAlias).
+        // The still-exists guard protects against a language deleted then re-created before processing.
+        foreach (string culture in item.RemovedCultures)
+        {
+            if (cultures.Contains(culture, StringComparer.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            yield return new DeleteWhereEntry { Where = new() { { "variant", culture } } };
+        }
+
         if (item.FullSync)
         {
             IDictionaryItem[] all = [.. await dictionaryItemService.GetDescendantsAsync(null, null).ConfigureAwait(false)];

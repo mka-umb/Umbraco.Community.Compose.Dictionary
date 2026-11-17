@@ -23,7 +23,8 @@ internal sealed class DictionaryNotificationHandler(
     ILogger<DictionaryNotificationHandler> logger) :
         INotificationHandler<DictionaryItemSavedNotification>,
         INotificationHandler<DictionaryItemDeletedNotification>,
-        INotificationHandler<DictionaryItemMovedNotification>
+        INotificationHandler<DictionaryItemMovedNotification>,
+        INotificationHandler<LanguageDeletedNotification>
 {
     public void Handle(DictionaryItemSavedNotification notification) =>
         Enqueue(notification.SavedEntities.Select(static x => new DictionaryChange(x.Key, IncludeDescendants: false)));
@@ -35,7 +36,34 @@ internal sealed class DictionaryNotificationHandler(
     public void Handle(DictionaryItemMovedNotification notification) =>
         Enqueue(notification.MoveInfoCollection.Select(static x => new DictionaryChange(x.Entity.Key, IncludeDescendants: true)));
 
+    // The notification fires after deletion, so the culture can no longer be re-read from the live
+    // language list. Carry its ISO code explicitly so the processor can remove those variants.
+    public void Handle(LanguageDeletedNotification notification) =>
+        EnqueueRemovedCultures(notification.DeletedEntities.Select(static x => x.IsoCode));
+
     private void Enqueue(IEnumerable<DictionaryChange> changes)
+    {
+        DictionaryChange[] changeArray = [.. changes];
+        if (changeArray.Length == 0)
+        {
+            return;
+        }
+
+        EnqueueItem(new DictionaryIngestQueueItem(changeArray));
+    }
+
+    private void EnqueueRemovedCultures(IEnumerable<string> cultures)
+    {
+        string[] removed = [.. cultures.Where(static c => !string.IsNullOrWhiteSpace(c))];
+        if (removed.Length == 0)
+        {
+            return;
+        }
+
+        EnqueueItem(new DictionaryIngestQueueItem([]) { RemovedCultures = removed });
+    }
+
+    private void EnqueueItem(DictionaryIngestQueueItem item)
     {
         if (!composeOptions.Value.IsValid || !dictionaryOptions.Value.IsValid)
         {
@@ -43,13 +71,6 @@ internal sealed class DictionaryNotificationHandler(
             return;
         }
 
-        DictionaryChange[] changeArray = [.. changes];
-        if (changeArray.Length == 0)
-        {
-            return;
-        }
-
-        DictionaryIngestQueueItem item = new(changeArray);
         IScopeContext? scopeContext = coreScopeProvider.Context;
 
         if (scopeContext is null)

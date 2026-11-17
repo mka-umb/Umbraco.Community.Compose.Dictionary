@@ -68,7 +68,7 @@ Each dictionary item becomes one Compose entry per language:
 - **`type`** is `TypeSchemaAlias`.
 - **`data`** holds `{ key, value, parentId, ancestors, updateDate }`.
 
-Clearing a translation deletes that variant. Deleting an item deletes its subtree via `ancestors_some`.
+Clearing a translation deletes that variant, and deleting a language deletes all of its variants. Deleting an item deletes its subtree via `ancestors_some`.
 
 The type schema is registered as a Compose node (it extends `https://umbracocompose.com/v1/node`), so Compose exposes it as a GraphQL type that implements the `Node` interface. That is what lets you select `id` and spread `... on DictionaryItem` on the connection's `items`. The example below follows the query shape used by the official Compose Data Source package; check the type name against your environment's GraphQL schema (Compose derives it from `TypeSchemaAlias`, so the default `dictionaryItem` becomes `DictionaryItem`).
 
@@ -96,7 +96,6 @@ The request payloads mirror the official content ingestion's entry types (as of 
 ## Known gaps
 
 - **Deletes made while the site is down.** A delete whose retries all fail, or a delete still queued in memory at shutdown, is not repaired by the startup sync, because the sync only upserts.
-- **Language deletion.** Deleting a language does not remove that culture's variants from Compose.
 - **Type schema.** The generated schema has not been validated against every Compose schema rule. Review it in a dev environment first.
 
 ## License

@@ -92,6 +92,12 @@ internal sealed record DictionaryIngestQueueItem(
     IReadOnlyCollection<DictionaryChange> Changes,
     bool FullSync = false)
 {
+    /// <summary>
+    /// ISO codes of languages deleted in Umbraco. Their variants are removed from Compose. Carried
+    /// explicitly because a deleted language can no longer be re-read from the live language list.
+    /// </summary>
+    public IReadOnlyCollection<string> RemovedCultures { get; init; } = [];
+
     /// <summary>A unique id, used as the scope enlistment key.</summary>
     public Guid Id { get; init; } = Guid.CreateVersion7();
 
