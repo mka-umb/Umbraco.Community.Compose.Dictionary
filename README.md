@@ -10,7 +10,7 @@ This is an independent community package. It is not part of, or maintained with,
 
 ## Requirements
 
-- Umbraco CMS 17 (.NET 10).
+- Umbraco CMS 17 or 18 (.NET 10).
 - An Umbraco Compose project with a collection dedicated to dictionary items.
 - An API Application with the `{environment}:ingestion` scope. Add `{environment}:typeschema:write` if `RegisterTypeSchema` is on (the default).
 

@@ -6,6 +6,15 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-24
+
+### Changed
+- Added Umbraco 18 support. The Umbraco dependency ranges now span `[17.0.0, 19.0.0)`, so a single
+  package installs on both Umbraco 17 and 18; NuGet floats the shared dependencies up to the host's
+  major. No source changes were needed — the package uses only APIs common to both majors. The
+  `OpenIddict.Client` floor was raised to `7.6.0` to match Compose Core 18 and avoid a package
+  downgrade on an Umbraco 18 host.
+
 ## [1.0.5] - 2026-11-17
 
 ### Fixed
@@ -53,7 +62,8 @@ All notable changes to this project are documented here. The format is based on
   does not collide with the official integration's registration and is unaffected by other OpenIddict
   clients (e.g. Slack, Umbraco Cloud).
 
-[Unreleased]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.5...HEAD
+[Unreleased]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.5...v1.1.0
 [1.0.5]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/mka-umb/Umbraco.Community.Compose.Dictionary/compare/v1.0.2...v1.0.3
