@@ -34,7 +34,7 @@
   <ItemGroup>
     <!-- Spans Umbraco 17 and 18: the package compiles against the 17 floor and uses only APIs common
          to both majors, so NuGet floats these up to the host's major (17 or 18) at install time. -->
-    <PackageReference Include="Umbraco.Cms.Infrastructure" Version="[17.0.0, 19.0.0)" />
+    <PackageReference Include="Umbraco.Cms.Infrastructure" Version="[18.3.2, 19.0.0)" />
     <PackageReference Include="Umbraco.Compose.Integrations.UmbracoCms.Core" Version="[17.0.0, 19.0.0)" />
     <!-- Used by ComposeAuthenticationMessageHandler to request a client-credentials token with an
          explicit issuer. Floor matches Compose Core 18's OpenIddict dependency (7.6.0), avoiding a
